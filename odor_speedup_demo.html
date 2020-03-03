@@ -2,8 +2,12 @@
 <html>
 <head><meta charset="utf-8" />
 
-
 <title>odor_speedup_demo</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
 
 <style type="text/css">
     /*!
@@ -13029,17 +13033,20 @@ div#notebook {
   div.cell {
     display: block;
     page-break-inside: avoid;
-  }
-  div.output_wrapper {
+  } 
+  div.output_wrapper { 
     display: block;
-    page-break-inside: avoid;
+    page-break-inside: avoid; 
   }
-  div.output {
+  div.output { 
     display: block;
-    page-break-inside: avoid;
+    page-break-inside: avoid; 
   }
 }
 </style>
+
+<!-- Custom stylesheet, it must be in the same directory as the html file -->
+<link rel="stylesheet" href="custom.css">
 
 <!-- Loading mathjax macro -->
 <!-- Load mathjax -->
@@ -13062,63 +13069,14 @@ div#notebook {
         }
     });
     </script>
-    <!-- End of mathjax configuration -->
-
-<style>
-        .cell.nbinteract-left {
-            width: 50%;
-            float: left;
-        }
-
-        .cell.nbinteract-right {
-            width: 50%;
-            float: right;
-        }
-
-        .cell.nbinteract-hide_in > .input {
-            display: none;
-        }
-
-        .cell.nbinteract-hide_out > .output_wrapper {
-            display: none;
-        }
-
-        .cell:after {
-          content: "";
-          display: table;
-          clear: both;
-        }
-
-        div.output_subarea {
-            max-width: initial;
-        }
-
-        .jp-OutputPrompt {
-            display: none;
-        }
-    </style></head>
+    <!-- End of mathjax configuration --></head>
 <body>
   <div tabindex="-1" id="notebook" class="border-box-sizing">
-    <div class="container">
-      
+    <div class="container" id="notebook-container">
 
-
-
-  <div class="cell text_cell">
-    <button class="js-nbinteract-widget">
-      Loading widgets...
-    </button>
-  </div>
-
-
-
-
-  
-
-  <div class="
-      cell border-box-sizing code_cell rendered">
-    <div class="input">
-
+<div class="cell border-box-sizing code_cell rendered celltag_hide_output">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -13133,14 +13091,16 @@ div#notebook {
 </div>
 </div>
 
-  </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h4 id="Background">Background<a class="anchor-link" href="#Background">&#182;</a></h4>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Flies and other insects have been observed to use a <a href="https://www.sciencedirect.com/science/article/pii/S0960982213015820">"cast and surge"</a> behavior to chase an odor plume to its source .</p>
 <p>To understand and simulate plume-tracking behavior, it is useful to have an efficient method to compute the odor experienced by a swarm of flies as they move through the odor produced by time-evolving odor plumes.</p>
@@ -13149,102 +13109,12 @@ div#notebook {
 </div>
 </div>
 </div>
-
-  
-
-  <div class="
-      cell border-box-sizing code_cell rendered">
-    <div class="input">
-
+<div class="cell border-box-sizing code_cell rendered celltag_hide_input">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#[hidden cell w/ plume &amp; fly setup -- see .ipynb] </span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-  </div>
-
-  
-
-  <div class="nbinteract-hide_in
-      cell border-box-sizing code_cell rendered">
-    <div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#HIDDEN</span>
-<span class="c1">#constants</span>
-<span class="n">num_flies</span> <span class="o">=</span> <span class="mi">10000</span>
-<span class="n">arena_size</span> <span class="o">=</span> <span class="mi">1000</span>
-<span class="n">run_time</span> <span class="o">=</span> <span class="mi">5</span> <span class="c1">#min</span>
-
-<span class="c1">#Here we have the original implementation and show the time it takes</span>
-<span class="n">xlim</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">arena_size</span><span class="p">,</span> <span class="n">arena_size</span><span class="p">)</span>
-<span class="n">ylim</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">arena_size</span><span class="p">,</span> <span class="n">arena_size</span><span class="p">)</span>
-<span class="n">sim_region</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">(</span><span class="n">xlim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>  <span class="n">ylim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ylim</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">xlim</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-<span class="n">wind_region</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">(</span><span class="n">xlim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>  <span class="n">ylim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>  <span class="n">xlim</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">ylim</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-<span class="n">wind_mag</span> <span class="o">=</span> <span class="mf">1.4</span>
-
-
-<span class="c1">#wind model setup</span>
-<span class="n">diff_eq</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">aspect_ratio</span><span class="o">=</span> <span class="p">(</span><span class="n">xlim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">xlim</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">ylim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">ylim</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="n">noise_gain</span><span class="o">=</span><span class="mf">3.</span>
-<span class="n">noise_damp</span><span class="o">=</span><span class="mf">0.071</span>
-<span class="n">noise_bandwidth</span><span class="o">=</span><span class="mf">0.71</span>
-<span class="n">wind_grid_density</span> <span class="o">=</span> <span class="mi">200</span>
-<span class="n">constant_wind_angle</span> <span class="o">=</span> <span class="mi">7</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">4.</span>
-<span class="n">wind_field</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">WindModel</span><span class="p">(</span><span class="n">wind_region</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">wind_grid_density</span><span class="o">*</span><span class="n">aspect_ratio</span><span class="p">),</span>
-    <span class="n">wind_grid_density</span><span class="p">,</span><span class="n">noise_gain</span><span class="o">=</span><span class="n">noise_gain</span><span class="p">,</span><span class="n">noise_damp</span><span class="o">=</span><span class="n">noise_damp</span><span class="p">,</span>
-    <span class="n">noise_bandwidth</span><span class="o">=</span><span class="n">noise_bandwidth</span><span class="p">,</span>\
-                              <span class="n">angle</span><span class="o">=</span><span class="n">constant_wind_angle</span><span class="p">,</span><span class="n">mag</span><span class="o">=</span><span class="n">wind_mag</span><span class="p">)</span>
-
-
-<span class="n">plume_width_factor</span> <span class="o">=</span> <span class="mi">4</span>
-<span class="n">centre_rel_diff_scale</span> <span class="o">=</span> <span class="mf">2.</span><span class="o">*</span><span class="n">plume_width_factor</span>
-<span class="c1"># puff_release_rate = 0.001</span>
-<span class="n">puff_release_rate</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="n">puff_spread_rate</span><span class="o">=</span><span class="mf">0.005</span>
-<span class="n">puff_init_rad</span> <span class="o">=</span> <span class="mf">0.01</span>
-<span class="n">max_num_puffs</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mf">2e5</span><span class="p">)</span>
-<span class="c1"># max_num_puffs=100</span>
-<span class="n">source_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">700</span><span class="p">],[</span><span class="mi">300</span><span class="p">,</span><span class="mi">1000</span><span class="p">]])</span><span class="o">.</span><span class="n">T</span>
-<span class="n">plume_dt</span> <span class="o">=</span> <span class="mf">0.25</span>
-
-<span class="n">plumes</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PlumeModel</span><span class="p">(</span>
-<span class="n">sim_region</span><span class="p">,</span> <span class="n">source_pos</span><span class="p">,</span> <span class="n">wind_field</span><span class="p">,</span> <span class="n">run_time</span><span class="o">*</span><span class="mi">60</span><span class="p">,</span> <span class="n">plume_dt</span><span class="p">,</span> <span class="n">centre_rel_diff_scale</span><span class="o">=</span><span class="n">centre_rel_diff_scale</span><span class="p">,</span> \
-<span class="n">puff_release_rate</span><span class="o">=</span><span class="n">puff_release_rate</span><span class="p">,</span> \
-<span class="n">puff_init_rad</span><span class="o">=</span><span class="n">puff_init_rad</span><span class="p">,</span><span class="n">puff_spread_rate</span><span class="o">=</span><span class="n">puff_spread_rate</span><span class="p">,</span> \
-<span class="n">max_num_puffs</span><span class="o">=</span><span class="n">max_num_puffs</span><span class="p">)</span>
-
-<span class="c1">#Run the plumes for a while to create enough puffs</span>
-<span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">run_time</span><span class="o">*</span><span class="mi">60</span><span class="o">/</span><span class="n">plume_dt</span><span class="p">)):</span>
-    <span class="n">plumes</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">plume_dt</span><span class="p">)</span>
-
-<span class="c1">#make an array of fly locations</span>
-<span class="c1">#target_locs = np.random.uniform(0.,arena_size,(num_flies,2)) #shape num_flies x 2</span>
-
-<span class="n">rs</span> <span class="o">=</span> <span class="p">(</span><span class="n">arena_size</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="n">num_flies</span><span class="p">))</span>
-<span class="n">angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="n">num_flies</span><span class="p">)</span>
-
-<span class="n">x</span> <span class="o">=</span> <span class="n">rs</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angles</span><span class="p">)</span> <span class="o">+</span> <span class="mi">400</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">rs</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angles</span><span class="p">)</span> <span class="o">+</span> <span class="mi">600</span>
-
-<span class="n">target_locs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
-
-<span class="n">puff_array</span> <span class="o">=</span> <span class="n">plumes</span><span class="o">.</span><span class="n">puff_array</span>
-
-
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
-<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">target_locs</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">target_locs</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;flies&#39;</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="c1">#,c=conc_vals)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">puff_array</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">],</span><span class="n">puff_array</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">],</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;odor packets&#39;</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="n">puff_array</span><span class="p">[:,:,</span><span class="mi">3</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.2</span><span class="p">,</span><span class="mf">0.5</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#plume setup↔</span>
 </pre></div>
 
     </div>
@@ -13257,7 +13127,8 @@ div#notebook {
 
 <div class="output_area">
 
-    
+    <div class="prompt"></div>
+
 
 
 
@@ -13272,21 +13143,24 @@ div#notebook {
 </div>
 </div>
 
-  </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Say we have $M$ fly locations, and for each fly-location, we want to compute the experienced odor concentration, which is the sum of the values of $N$ 2D Gaussian concentration distributions.</p>
 
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h4 id="Speedup-with-Grid-Approximation">Speedup with Grid Approximation<a class="anchor-link" href="#Speedup-with-Grid-Approximation">&#182;</a></h4>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>In <a href="https://github.com/annierak/fly_pompy/blob/3d0211701de18488c29214816bb8c9e1e12b8812/pompy/processors.py#L17">Matt's original implementation</a>, this computation takes order $M*N$, which grows slow with a large ensemble of flies. We can use a grid-based method (inspired from the techniques used <a href="https://epubs.siam.org/doi/abs/10.1137/0912004">here</a>) to speed up the fly-odor computation to order $M+N$ (implementation <a href="https://github.com/annierak/fly_pompy/blob/27fd9620b13de66c4252c2897d1968e42866fba5/pompy/processors.py#L116">here</a>).</p>
 <p>The rough idea is split space into a grid, and to sum for each fly the contributions only from the puffs that are in grid boxes near the fly.</p>
@@ -13294,30 +13168,12 @@ div#notebook {
 </div>
 </div>
 </div>
-
-  
-
-  <div class="
-      cell border-box-sizing code_cell rendered">
-    <div class="input">
-
+<div class="cell border-box-sizing code_cell rendered celltag_hide_input">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">r_sq_max</span><span class="o">=</span><span class="mi">20</span><span class="p">;</span><span class="n">epsilon</span><span class="o">=</span><span class="mf">0.00001</span><span class="p">;</span>
-<span class="n">N</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">((</span><span class="mf">1e6</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">puff_array</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">]))))</span>
-<span class="n">box_min</span><span class="o">=-</span><span class="mi">1</span><span class="o">*</span><span class="n">arena_size</span><span class="p">;</span><span class="n">box_max</span> <span class="o">=</span> <span class="n">arena_size</span><span class="p">;</span><span class="n">puff_mol_amt</span><span class="o">=</span><span class="mf">1.</span>
-<span class="n">odor_field</span> <span class="o">=</span> <span class="n">processors</span><span class="o">.</span><span class="n">ConcentrationValueCalculator</span><span class="p">(</span><span class="n">puff_mol_amt</span><span class="p">)</span> 
-<span class="n">odor_field1</span> <span class="o">=</span> <span class="n">processors</span><span class="o">.</span><span class="n">ConcentrationValueFastCalculator</span><span class="p">(</span><span class="n">box_min</span><span class="p">,</span><span class="n">box_max</span><span class="p">,</span><span class="n">r_sq_max</span><span class="p">,</span><span class="n">epsilon</span><span class="p">,</span><span class="n">puff_mol_amt</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
-
-<span class="n">last</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="n">conc_vals</span> <span class="o">=</span> <span class="n">odor_field</span><span class="o">.</span><span class="n">calc_conc_list</span><span class="p">(</span>
-                <span class="n">puff_array</span><span class="p">,</span> <span class="n">target_locs</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">target_locs</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;old method takes &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">last</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39; seconds&#39;</span><span class="p">)</span>
-
-<span class="n">last</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="n">conc_vals1</span> <span class="o">=</span> <span class="n">odor_field1</span><span class="o">.</span><span class="n">calc_conc_list</span><span class="p">(</span>
-                <span class="n">puff_array</span><span class="p">,</span> <span class="n">target_locs</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">target_locs</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;new method takes &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">last</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39; seconds&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#Speed comparison↔</span>
 </pre></div>
 
     </div>
@@ -13330,7 +13186,8 @@ div#notebook {
 
 <div class="output_area">
 
-    
+    <div class="prompt"></div>
+
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>old method takes 1.627 seconds
@@ -13342,35 +13199,22 @@ new method takes 0.101 seconds
 </div>
 </div>
 
-  </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Yay! 10x speed increase.</p>
+<p>Yay! About 10x speed increase.</p>
 <p>Now let's check that the values computed are preserved between the old and the new algorithm. An easy way to do this is to plot the values against each other to make sure they line up on the unity line.</p>
 
 </div>
 </div>
 </div>
-
-  
-
-  <div class="
-      cell border-box-sizing code_cell rendered">
-    <div class="input">
-
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
-<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">conc_vals</span><span class="p">,</span> <span class="n">conc_vals1</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="n">xmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">conc_vals1</span><span class="p">,</span><span class="mi">99</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">xmax</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">xmax</span><span class="p">,</span><span class="mi">100</span><span class="p">))</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">xmax</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">xmax</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Original Conc Values&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Values Computed Using Approximation&#39;</span><span class="p">)</span>
-<span class="c1">#ax.yaxis.set_major_formatter(FormatStrFormatter(&#39;%.f&#39;))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#Accuracy check↔</span>
 </pre></div>
 
     </div>
@@ -13383,7 +13227,8 @@ new method takes 0.101 seconds
 
 <div class="output_area">
 
-    
+    <div class="prompt"></div>
+
 
 
 
@@ -13398,15 +13243,17 @@ new method takes 0.101 seconds
 </div>
 </div>
 
-  </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Theory of the Approximation</strong></p>
 
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>We borrow from some of the techniques discussed <a href="https://epubs.siam.org/doi/abs/10.1137/0912004">here</a> to implement the approximation.</p>
 <p>Instead of computing the concentration for every source for every target (order $M*N$), we instead</p>
@@ -13422,29 +13269,11 @@ $$ R^2 \geq -\log\Big[\epsilon\frac{\sqrt{8\pi^3}}{N}\cdot \sigma^3\Big]\cdot 2\
 </div>
 </div>
 </div>
-
-
-
-<!-- Loads nbinteract package -->
-<script src="https://unpkg.com/nbinteract-core" async></script>
-<script>
-  (function setupNbinteract() {
-    // If NbInteract hasn't loaded, wait one second and try again
-    if (window.NbInteract === undefined) {
-      setTimeout(setupNbinteract, 1000)
-      return
-    }
-
-    var interact = new window.NbInteract({
-      spec: 'annierak/odor_speedup_demo/master',
-      baseUrl: 'https://mybinder.org',
-      provider: 'gh',
-    })
-    interact.prepare()
-
-    window.interact = interact
-  })()
-</script>
     </div>
   </div>
 </body>
+
+ 
+
+
+</html>
