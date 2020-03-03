@@ -13288,8 +13288,8 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>In <a href="https://github.com/annierak/fly_pompy/blob/3d0211701de18488c29214816bb8c9e1e12b8812/pompy/processors.py#L17">Matt's original implementation</a>, this computation takes order $M*N$, which grows slow with a large ensemble of flies. We can use a grid-based method (inspired from the techniques used <a href="https://epubs.siam.org/doi/abs/10.1137/0912004">here</a> to speed up the fly-odor computation to order $M+N$ (implementation <a href="https://github.com/annierak/fly_pompy/blob/27fd9620b13de66c4252c2897d1968e42866fba5/pompy/processors.py#L116">here</a>).</p>
-<p>The rough idea is split space into a grid, and to sum for each fly the contributions only from the puffs that are in grid boxes near the fly*.</p>
+<p>In <a href="https://github.com/annierak/fly_pompy/blob/3d0211701de18488c29214816bb8c9e1e12b8812/pompy/processors.py#L17">Matt's original implementation</a>, this computation takes order $M*N$, which grows slow with a large ensemble of flies. We can use a grid-based method (inspired from the techniques used <a href="https://epubs.siam.org/doi/abs/10.1137/0912004">here</a>) to speed up the fly-odor computation to order $M+N$ (implementation <a href="https://github.com/annierak/fly_pompy/blob/27fd9620b13de66c4252c2897d1968e42866fba5/pompy/processors.py#L116">here</a>).</p>
+<p>The rough idea is split space into a grid, and to sum for each fly the contributions only from the puffs that are in grid boxes near the fly.</p>
 
 </div>
 </div>
@@ -13308,23 +13308,8 @@ div#notebook {
 <span class="n">box_min</span><span class="o">=-</span><span class="mi">1</span><span class="o">*</span><span class="n">arena_size</span><span class="p">;</span><span class="n">box_max</span> <span class="o">=</span> <span class="n">arena_size</span><span class="p">;</span><span class="n">puff_mol_amt</span><span class="o">=</span><span class="mf">1.</span>
 <span class="n">odor_field</span> <span class="o">=</span> <span class="n">processors</span><span class="o">.</span><span class="n">ConcentrationValueCalculator</span><span class="p">(</span><span class="n">puff_mol_amt</span><span class="p">)</span> 
 <span class="n">odor_field1</span> <span class="o">=</span> <span class="n">processors</span><span class="o">.</span><span class="n">ConcentrationValueFastCalculator</span><span class="p">(</span><span class="n">box_min</span><span class="p">,</span><span class="n">box_max</span><span class="p">,</span><span class="n">r_sq_max</span><span class="p">,</span><span class="n">epsilon</span><span class="p">,</span><span class="n">puff_mol_amt</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
-</pre></div>
 
-    </div>
-</div>
-</div>
-
-  </div>
-
-  
-
-  <div class="
-      cell border-box-sizing code_cell rendered">
-    <div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">last</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">last</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 <span class="n">conc_vals</span> <span class="o">=</span> <span class="n">odor_field</span><span class="o">.</span><span class="n">calc_conc_list</span><span class="p">(</span>
                 <span class="n">puff_array</span><span class="p">,</span> <span class="n">target_locs</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">target_locs</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;old method takes &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">last</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39; seconds&#39;</span><span class="p">)</span>
@@ -13437,23 +13422,6 @@ $$ R^2 \geq -\log\Big[\epsilon\frac{\sqrt{8\pi^3}}{N}\cdot \sigma^3\Big]\cdot 2\
 </div>
 </div>
 </div>
-
-  
-
-  <div class="
-      cell border-box-sizing code_cell rendered">
-    <div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> 
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-  </div>
 
 
 
